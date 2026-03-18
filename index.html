@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lens Suite — Stop Guessing the Market. Start Seeing It.</title>
+<meta name="description" content="3 free Chrome extensions for investors. Macro regime scoring, earnings risk analysis, sector rotation — answered in 1 second. Works on TradingView.">
+<meta name="keywords" content="chrome extension investing, market score, TradingView extension, macro indicators, earnings risk, sector rotation, VIX tracker, is it safe to buy stocks">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Lens Suite — Stop Guessing the Market">
+<meta property="og:description" content="3 free Chrome extensions that answer the questions every investor asks. Macro regime, earnings risk, sector rotation.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lenssuite.com">
+<meta property="og:image" content="https://lenssuite.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Lens Suite — Stop Guessing the Market">
+<meta name="twitter:description" content="3 free Chrome extensions for investors. Answered in 1 second.">
+
+<!-- Favicon (inline SVG as data URI) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%232563eb'/><text x='16' y='22' font-family='Arial' font-size='18' font-weight='bold' fill='white' text-anchor='middle'>L</text></svg>">
+
+<link rel="canonical" href="https://lenssuite.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fafaf9;--card:#fff;--text:#1c1917;--muted:#78716c;--light:#a8a29e;--border:#e7e5e4;--surface:#f5f5f4;--blue:#2563eb;--purple:#7c3aed;--green:#059669;--red:#dc2626;--amber:#d97706}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+h1,h2,h3,.serif{font-family:'Fraunces',Georgia,serif}
+a{color:inherit}
+img{max-width:100%}
+.wrap{max-width:1060px;margin:0 auto;padding:0 24px}
+.hide-m{display:block}
+.show-m{display:none}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,249,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:box-shadow .3s}
+.nav.scrolled{box-shadow:0 1px 8px rgba(0,0,0,.04)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:54px}
+.nav-logo{font-size:17px;font-weight:700;letter-spacing:-.3px;text-decoration:none}
+.nav-logo span{color:var(--blue)}
+.nav-r{display:flex;gap:20px;align-items:center}
+.nav-r a{font-size:13px;color:var(--muted);text-decoration:none;font-weight:500;transition:.15s}
+.nav-r a:hover{color:var(--text)}
+.nav-cta{background:var(--text);color:#fff!important;padding:7px 18px;border-radius:8px;font-size:12px;font-weight:700;transition:.15s}
+.nav-cta:hover{opacity:.9}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px}
+.hamburger svg{width:24px;height:24px;color:var(--text)}
+.mobile-menu{display:none;position:fixed;top:54px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--border);padding:16px 24px;flex-direction:column;gap:12px;z-index:99}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:15px;color:var(--text);text-decoration:none;padding:8px 0;font-weight:500;border-bottom:1px solid var(--border)}
+.mobile-menu a:last-child{border-bottom:none}
+
+/* HERO */
+.hero{padding:110px 0 56px;text-align:center}
+.hero-pain{font-size:14px;color:var(--red);font-weight:600;letter-spacing:.5px;margin-bottom:16px;text-transform:uppercase}
+.hero h1{font-size:clamp(30px,5vw,50px);font-weight:700;line-height:1.1;letter-spacing:-1.5px;max-width:700px;margin:0 auto 16px}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--blue),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:17px;color:var(--muted);max-width:520px;margin:0 auto 28px;line-height:1.65}
+.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-main{display:inline-flex;align-items:center;gap:6px;background:var(--text);color:#fff;padding:13px 28px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;transition:.2s;border:none;cursor:pointer;font-family:inherit}
+.btn-main:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.btn-ghost{display:inline-flex;align-items:center;gap:6px;background:transparent;color:var(--text);padding:13px 28px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;border:1px solid var(--border);transition:.15s}
+.btn-ghost:hover{border-color:var(--text)}
+.hero-proof{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:24px;font-size:12px;color:var(--light)}
+
+/* PROBLEM */
+.problem{padding:64px 0;border-top:1px solid var(--border)}
+.problem h2{text-align:center;font-size:clamp(22px,3.5vw,34px);font-weight:700;letter-spacing:-.8px;max-width:600px;margin:0 auto 36px;line-height:1.2}
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pain-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;transition:.2s}
+.pain-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.04)}
+.pain-emoji{font-size:28px;margin-bottom:10px}
+.pain-q{font-family:'Fraunces',serif;font-size:17px;font-weight:600;margin-bottom:6px}
+.pain-desc{font-size:13px;color:var(--muted);line-height:1.55}
+.pain-old{margin-top:10px;font-size:12px;color:var(--red);font-weight:600;padding:4px 10px;background:#fef2f2;border-radius:6px;display:inline-block}
+.pain-new{margin-top:4px;font-size:12px;color:var(--green);font-weight:600;padding:4px 10px;background:#f0fdf4;border-radius:6px;display:inline-block}
+
+/* SOLUTIONS */
+.solutions{padding:64px 0;border-top:1px solid var(--border)}
+.solutions h2{text-align:center;font-size:clamp(22px,3.5vw,34px);font-weight:700;letter-spacing:-.8px;margin-bottom:8px}
+.solutions-sub{text-align:center;font-size:15px;color:var(--muted);margin-bottom:40px}
+.sol-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.sol-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px;transition:.25s}
+.sol-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.05)}
+.sol-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;margin-bottom:14px}
+.sol-icon.blue{background:linear-gradient(135deg,#1e3a5f,var(--blue))}
+.sol-icon.purple{background:linear-gradient(135deg,#5b21b6,var(--purple))}
+.sol-icon.green{background:linear-gradient(135deg,#047857,var(--green))}
+.sol-q{font-family:'Fraunces',serif;font-size:18px;font-weight:600;margin-bottom:6px}
+.sol-a{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:16px}
+.sol-features{list-style:none;margin-bottom:20px}
+.sol-features li{font-size:12px;padding:5px 0;border-bottom:1px solid #f5f5f4;display:flex;gap:6px;align-items:center}
+.sol-features li:last-child{border-bottom:none}
+.sol-features .ck{color:var(--green);font-weight:700;font-size:11px}
+.sol-features .lk{color:var(--light);font-size:10px}
+.sol-cta{display:block;text-align:center;padding:10px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;transition:.15s}
+.sol-cta.blue{background:#eff6ff;color:var(--blue)}.sol-cta.purple{background:#f5f3ff;color:var(--purple)}.sol-cta.green{background:#ecfdf5;color:var(--green)}
+.sol-cta:hover{opacity:.8}
+.sol-price{text-align:center;font-size:11px;color:var(--light);margin-top:8px}
+
+/* PROOF */
+.proof{padding:48px 0;border-top:1px solid var(--border);text-align:center}
+.proof-hl{font-size:14px;color:var(--muted);font-weight:500;margin-bottom:20px}
+.proof-items{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+.proof-num{font-family:'Fraunces',serif;font-size:28px;font-weight:700}
+.proof-label{font-size:12px;color:var(--muted)}
+
+/* HOW */
+.how{padding:64px 0;border-top:1px solid var(--border)}
+.how h2{text-align:center;font-size:clamp(22px,3.5vw,34px);font-weight:700;letter-spacing:-.8px;margin-bottom:40px}
+.how-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.how-step{text-align:center}
+.how-n{width:36px;height:36px;border-radius:50%;background:var(--surface);display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;margin-bottom:10px}
+.how-step h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.how-step p{font-size:13px;color:var(--muted);line-height:1.55;max-width:260px;margin:0 auto}
+
+/* PRICING */
+.pricing{padding:64px 0;border-top:1px solid var(--border)}
+.pricing h2{text-align:center;font-size:clamp(22px,3.5vw,34px);font-weight:700;letter-spacing:-.8px;margin-bottom:8px}
+.pricing-sub{text-align:center;font-size:15px;color:var(--muted);margin-bottom:36px}
+.pr-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:640px;margin:0 auto}
+.pr-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 24px;text-align:center}
+.pr-card.feat{border:2px solid var(--text);position:relative}
+.pr-card.feat::before{content:"Best value";position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-size:10px;font-weight:700;padding:3px 12px;border-radius:99px}
+.pr-name{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px}
+.pr-price{font-family:'Fraunces',serif;font-size:36px;font-weight:700;margin-bottom:2px}
+.pr-period{font-size:12px;color:var(--light);margin-bottom:18px}
+.pr-features{list-style:none;text-align:left;margin-bottom:20px}
+.pr-features li{font-size:12px;padding:4px 0;display:flex;gap:5px}
+.pr-features .y{color:var(--green)}.pr-features .n{color:#d6d3d1}
+.pr-btn{display:block;width:100%;padding:11px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;text-align:center;border:none;cursor:pointer;font-family:inherit;transition:.15s}
+.pr-btn.free{background:var(--surface);color:var(--text)}.pr-btn.paid{background:var(--text);color:#fff}
+.pr-btn:hover{opacity:.9}
+
+/* OBJECTIONS */
+.objections{padding:48px 0;border-top:1px solid var(--border)}
+.objections h2{text-align:center;font-size:20px;font-weight:700;margin-bottom:28px}
+.obj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:700px;margin:0 auto}
+.obj{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;cursor:pointer;transition:.15s}
+.obj:hover{border-color:var(--blue)}
+.obj-q{font-size:13px;font-weight:700;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center}
+.obj-q .arrow{font-size:11px;color:var(--light);transition:.2s}
+.obj.open .arrow{transform:rotate(180deg)}
+.obj-a{font-size:12px;color:var(--muted);line-height:1.55;max-height:0;overflow:hidden;transition:max-height .3s ease}
+.obj.open .obj-a{max-height:200px}
+
+/* NOTIFY */
+.notify{padding:48px 0;border-top:1px solid var(--border);text-align:center}
+.notify h2{font-size:20px;font-weight:700;margin-bottom:8px}
+.notify p{font-size:14px;color:var(--muted);margin-bottom:20px}
+.notify-form{display:flex;gap:8px;max-width:400px;margin:0 auto}
+.notify-input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;transition:.15s}
+.notify-input:focus{border-color:var(--blue)}
+.notify-btn{background:var(--text);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap}
+.notify-btn:hover{opacity:.9}
+.notify-msg{margin-top:10px;font-size:12px;display:none}
+
+/* FINAL CTA */
+.final{padding:56px 0;text-align:center;border-top:1px solid var(--border)}
+.final h2{font-size:clamp(22px,3.5vw,34px);font-weight:700;letter-spacing:-.8px;margin-bottom:8px}
+.final p{font-size:15px;color:var(--muted);margin-bottom:24px}
+
+/* TRUST + FOOTER */
+.trust{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;padding:24px 0;font-size:12px;color:var(--light)}
+.footer{border-top:1px solid var(--border);padding:24px;text-align:center;font-size:12px;color:var(--light)}
+.footer a{color:var(--muted);text-decoration:none}
+.footer a:hover{color:var(--text)}
+
+/* MOBILE */
+@media(max-width:768px){
+  .pain-grid,.sol-grid,.how-steps{grid-template-columns:1fr}
+  .obj-grid{grid-template-columns:1fr}
+  .pr-grid{grid-template-columns:1fr}
+  .hide-m{display:none}
+  .show-m{display:block}
+  .hamburger{display:block}
+  .nav-r a:not(.nav-cta){display:none}
+  .hero{padding:90px 0 40px}
+  .hero h1{font-size:28px}
+  .hero-sub{font-size:15px}
+  .hero-proof{gap:12px;font-size:11px}
+  .proof-items{gap:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav"><div class="wrap">
+  <a href="#" class="nav-logo">Lens<span>Suite</span></a>
+  <div class="nav-r">
+    <a href="#tools" class="hide-m">Tools</a>
+    <a href="#pricing" class="hide-m">Pricing</a>
+    <a href="#faq" class="hide-m">FAQ</a>
+    <button class="hamburger" id="burger" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a class="nav-cta" href="#tools">Install free</a>
+  </div>
+</div></nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#tools">Tools</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#faq">FAQ</a>
+  <a href="#notify">Get notified</a>
+</div>
+
+<!-- HERO -->
+<section class="hero"><div class="wrap">
+  <div class="hero-pain">Every investor asks these 3 questions wrong</div>
+  <h1>Stop guessing the market.<br><em>Start seeing it.</em></h1>
+  <p class="hero-sub">You check charts, read headlines, scroll Twitter — and still don't know if it's safe to buy. Lens Suite gives you the answer in 1 second. Three Chrome extensions. Zero jargon.</p>
+  <div class="hero-ctas">
+    <a class="btn-main" href="#tools">Install free — takes 2 seconds</a>
+    <a class="btn-ghost" href="#how">See how it works</a>
+  </div>
+  <div class="hero-proof">
+    <span>&#x1f512; No account needed</span>
+    <span>&#x26a1; Free forever</span>
+    <span>&#x1f6ab; No ads or tracking</span>
+    <span>&#x1f4ca; Works on TradingView</span>
+  </div>
+</div></section>
+
+<!-- PROBLEM -->
+<section class="problem"><div class="wrap">
+  <h2>You're making decisions with half the picture</h2>
+  <div class="pain-grid">
+    <div class="pain-card">
+      <div class="pain-emoji">&#x1f630;</div>
+      <div class="pain-q">"Is it safe to buy right now?"</div>
+      <div class="pain-desc">You look at charts but miss the macro environment. Oil spikes, credit freezes, VIX explodes — and you find out after your position is down 15%.</div>
+      <div class="pain-old">Before: gut feeling + headlines</div>
+      <div class="pain-new">After: 1 score, 6 indicators, 1 second</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-emoji">&#x1f3b0;</div>
+      <div class="pain-q">"Should I hold through earnings?"</div>
+      <div class="pain-desc">Earnings are a coin flip — except it's not 50/50. Some stocks move 2%, some move 20%. You don't know which until it's too late.</div>
+      <div class="pain-old">Before: hope + pray</div>
+      <div class="pain-new">After: risk score + move history</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-emoji">&#x1f9ed;</div>
+      <div class="pain-q">"Which sectors are leading?"</div>
+      <div class="pain-desc">You buy tech because "it always goes up" — but money rotated to energy 3 weeks ago. You're swimming against the current.</div>
+      <div class="pain-old">Before: yesterday's assumptions</div>
+      <div class="pain-new">After: 11 sectors ranked live</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- SOLUTIONS -->
+<section class="solutions" id="tools"><div class="wrap">
+  <h2>One question. One tool. One second.</h2>
+  <p class="solutions-sub">Each extension answers one question that professional fund managers check every day.</p>
+  <div class="sol-grid">
+    <div class="sol-card">
+      <div class="sol-icon blue">M</div>
+      <div class="sol-q">"Is it safe to buy?"</div>
+      <div class="sol-a">MacroLens scores the market environment 1-10. Green means buy conditions. Red means protect capital. Based on the same 6 indicators institutions use.</div>
+      <ul class="sol-features">
+        <li><span class="ck">&#x2713;</span> Market fear (VIX) scoring</li>
+        <li><span class="ck">&#x2713;</span> S&amp;P trend vs 200-day</li>
+        <li><span class="ck">&#x2713;</span> Oil price shock detection</li>
+        <li><span class="lk">PRO</span> Credit, dollar &amp; rate indicators</li>
+        <li><span class="lk">PRO</span> Crisis override system</li>
+      </ul>
+      <a class="sol-cta blue cws-link" href="#notify" data-ext="macrolens">Install MacroLens &#x2192;</a>
+      <div class="sol-price">Free &middot; PRO $4.99/mo</div>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon purple">E</div>
+      <div class="sol-q">"How risky is this earnings?"</div>
+      <div class="sol-a">Type any ticker. EarningsLens shows earnings risk 1-10, IV rank, beat rate, and the average price move — before the announcement.</div>
+      <ul class="sol-features">
+        <li><span class="ck">&#x2713;</span> Earnings risk score 1-10</li>
+        <li><span class="ck">&#x2713;</span> IV rank percentile</li>
+        <li><span class="ck">&#x2713;</span> Historical beat rate</li>
+        <li><span class="lk">PRO</span> Max move + EPS surprises</li>
+        <li><span class="lk">PRO</span> Directional probability</li>
+      </ul>
+      <a class="sol-cta purple cws-link" href="#notify" data-ext="earningslens">Install EarningsLens &#x2192;</a>
+      <div class="sol-price">Free &middot; PRO $4.99/mo</div>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon green">S</div>
+      <div class="sol-q">"Where is the money flowing?"</div>
+      <div class="sol-a">SectorLens ranks all 11 S&amp;P sectors by strength. See rotation in real time. Buy where momentum is, not where it was.</div>
+      <ul class="sol-features">
+        <li><span class="ck">&#x2713;</span> Top 5 sectors ranked</li>
+        <li><span class="ck">&#x2713;</span> Weekly performance data</li>
+        <li><span class="ck">&#x2713;</span> Market breadth signal</li>
+        <li><span class="lk">PRO</span> All 11 sectors + 3-month</li>
+        <li><span class="lk">PRO</span> Rotation momentum arrows</li>
+      </ul>
+      <a class="sol-cta green cws-link" href="#notify" data-ext="sectorlens">Install SectorLens &#x2192;</a>
+      <div class="sol-price">Free &middot; PRO $4.99/mo</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- PROOF -->
+<section class="proof"><div class="wrap">
+  <div class="proof-hl">The same indicators institutional fund managers check daily</div>
+  <div class="proof-items">
+    <div><div class="proof-num">6</div><div class="proof-label">macro indicators</div></div>
+    <div><div class="proof-num">11</div><div class="proof-label">sectors ranked</div></div>
+    <div><div class="proof-num">15min</div><div class="proof-label">refresh cycle</div></div>
+    <div><div class="proof-num">$0</div><div class="proof-label">to start</div></div>
+  </div>
+</div></section>
+
+<!-- HOW -->
+<section class="how" id="how"><div class="wrap">
+  <h2>2 seconds to install. 1 second to read.</h2>
+  <div class="how-steps">
+    <div class="how-step"><div class="how-n">1</div><h3>Add to Chrome</h3><p>Click "Add to Chrome." No signup, no API key, no credit card. Works instantly.</p></div>
+    <div class="how-step"><div class="how-n">2</div><h3>See the score</h3><p>A colored badge appears in your toolbar. Click for details. Open TradingView and the overlay appears on your chart.</p></div>
+    <div class="how-step"><div class="how-n">3</div><h3>Decide with data</h3><p>Green? Buy with confidence. Yellow? Be selective. Red? Protect capital. No interpretation needed.</p></div>
+  </div>
+</div></section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing"><div class="wrap">
+  <h2>Free is not a trial. It's the real thing.</h2>
+  <p class="pricing-sub">Use all 3 tools free, forever. PRO unlocks everything when you're ready.</p>
+  <div class="pr-grid">
+    <div class="pr-card">
+      <div class="pr-name">Free</div>
+      <div class="pr-price">$0</div>
+      <div class="pr-period">forever &middot; no credit card</div>
+      <ul class="pr-features">
+        <li><span class="y">&#x2713;</span> All 3 extensions</li>
+        <li><span class="y">&#x2713;</span> Macro score + top indicators</li>
+        <li><span class="y">&#x2713;</span> Earnings risk score + basics</li>
+        <li><span class="y">&#x2713;</span> Top 5 sectors</li>
+        <li><span class="y">&#x2713;</span> TradingView overlay</li>
+        <li><span class="n">&mdash;</span> Full indicator access</li>
+        <li><span class="n">&mdash;</span> Crisis override system</li>
+        <li><span class="n">&mdash;</span> Rotation signals</li>
+      </ul>
+      <a class="pr-btn free" href="#tools">Install free</a>
+    </div>
+    <div class="pr-card feat">
+      <div class="pr-name">PRO (per extension)</div>
+      <div class="pr-price">$4.99</div>
+      <div class="pr-period">/month &middot; cancel anytime</div>
+      <ul class="pr-features">
+        <li><span class="y">&#x2713;</span> Everything in Free</li>
+        <li><span class="y">&#x2713;</span> All 6 macro indicators</li>
+        <li><span class="y">&#x2713;</span> Crisis trigger overrides</li>
+        <li><span class="y">&#x2713;</span> Full earnings intelligence</li>
+        <li><span class="y">&#x2713;</span> All 11 sectors + rotation</li>
+        <li><span class="y">&#x2713;</span> Momentum signals</li>
+        <li><span class="y">&#x2713;</span> Regime change alerts</li>
+        <li><span class="y">&#x2713;</span> Priority updates</li>
+      </ul>
+      <a class="pr-btn paid" href="#tools">Start PRO &#x2192;</a>
+    </div>
+  </div>
+</div></section>
+
+<!-- FAQ / OBJECTIONS -->
+<section class="objections" id="faq"><div class="wrap">
+  <h2>Questions you might have</h2>
+  <div class="obj-grid">
+    <div class="obj" data-faq><div class="obj-q"><span>"Is my data safe?"</span><span class="arrow">&#x25BC;</span></div><div class="obj-a">Everything runs locally in your browser. We don't collect, store, or send any of your data. No accounts, no analytics, no tracking. Zero.</div></div>
+    <div class="obj" data-faq><div class="obj-q"><span>"Where does the data come from?"</span><span class="arrow">&#x25BC;</span></div><div class="obj-a">Real-time market data from Yahoo Finance — the same source used by millions of investors. Updates every 15 minutes (macro) or on-demand (earnings).</div></div>
+    <div class="obj" data-faq><div class="obj-q"><span>"Is this financial advice?"</span><span class="arrow">&#x25BC;</span></div><div class="obj-a">No. Lens Suite provides data and scoring for informational purposes. Every investment decision is yours. We show the data — you decide the action.</div></div>
+    <div class="obj" data-faq><div class="obj-q"><span>"What if I only want one tool?"</span><span class="arrow">&#x25BC;</span></div><div class="obj-a">Each extension is completely independent. Install one, two, or all three. Each has its own free tier and optional PRO upgrade. No bundles needed.</div></div>
+    <div class="obj" data-faq><div class="obj-q"><span>"Why should I trust a new tool?"</span><span class="arrow">&#x25BC;</span></div><div class="obj-a">You shouldn't — yet. That's why the free tier is generous. Use it for weeks. See if the scores match reality. Then decide if PRO is worth $4.99.</div></div>
+    <div class="obj" data-faq><div class="obj-q"><span>"Can I cancel anytime?"</span><span class="arrow">&#x25BC;</span></div><div class="obj-a">Yes. One click. No retention pages, no guilt trips. You keep using the free tier after canceling.</div></div>
+  </div>
+</div></section>
+
+<!-- EMAIL NOTIFY -->
+<section class="notify" id="notify"><div class="wrap">
+  <h2>Get notified when we launch</h2>
+  <p>Extensions are in final testing. Drop your email and we'll tell you the moment they're live on Chrome Web Store.</p>
+  <div class="notify-form">
+    <input class="notify-input" type="email" id="emailInput" placeholder="you@email.com" required>
+    <button class="notify-btn" id="notifyBtn">Notify me</button>
+  </div>
+  <div class="notify-msg" id="notifyMsg"></div>
+</div></section>
+
+<!-- FINAL CTA -->
+<section class="final"><div class="wrap">
+  <h2>The market doesn't wait for you to figure it out.</h2>
+  <p>Next time oil spikes, credit freezes, or a sector rotates — will you know before your portfolio tells you?</p>
+  <a class="btn-main" href="#notify" style="font-size:16px;padding:15px 36px">Get early access — free</a>
+  <div style="margin-top:12px;font-size:12px;color:var(--light)">No spam &middot; Unsubscribe anytime</div>
+</div></section>
+
+<div class="trust"><div class="wrap" style="display:flex;justify-content:center;gap:28px;flex-wrap:wrap">
+  <span>&#x1f512; Zero data collection</span>
+  <span>&#x26a1; Real-time Yahoo Finance</span>
+  <span>&#x1f6ab; No ads ever</span>
+  <span>&#x1f30d; Works worldwide</span>
+</div></div>
+
+<footer class="footer">
+  <p>Lens Suite &middot; Institutional-grade market intelligence for everyone.</p>
+  <p style="margin-top:6px"><a href="mailto:support@lenssuite.com">Support</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a></p>
+  <p style="margin-top:8px;font-size:10px">Not financial advice. Data for informational purposes only.</p>
+</footer>
+
+<script>
+// Nav scroll shadow
+var nav = document.getElementById('nav');
+window.addEventListener('scroll', function() {
+  nav.classList.toggle('scrolled', window.scrollY > 10);
+});
+
+// Mobile menu
+var burger = document.getElementById('burger');
+var mobileMenu = document.getElementById('mobileMenu');
+burger.addEventListener('click', function() {
+  mobileMenu.classList.toggle('open');
+});
+// Close on link click
+mobileMenu.querySelectorAll('a').forEach(function(a) {
+  a.addEventListener('click', function() { mobileMenu.classList.remove('open'); });
+});
+
+// FAQ accordion
+document.querySelectorAll('[data-faq]').forEach(function(el) {
+  el.addEventListener('click', function() {
+    // Close others
+    document.querySelectorAll('[data-faq]').forEach(function(o) {
+      if (o !== el) o.classList.remove('open');
+    });
+    el.classList.toggle('open');
+  });
+});
+
+// Email signup (stores locally, ready for backend)
+var emailInput = document.getElementById('emailInput');
+var notifyBtn = document.getElementById('notifyBtn');
+var notifyMsg = document.getElementById('notifyMsg');
+
+notifyBtn.addEventListener('click', function() {
+  var email = emailInput.value.trim();
+  if (!email || !email.includes('@')) {
+    notifyMsg.style.display = 'block';
+    notifyMsg.style.color = '#dc2626';
+    notifyMsg.textContent = 'Please enter a valid email.';
+    return;
+  }
+
+  // Store locally (replace with real backend later)
+  var emails = JSON.parse(localStorage.getItem('ls_emails') || '[]');
+  if (emails.indexOf(email) === -1) emails.push(email);
+  localStorage.setItem('ls_emails', JSON.stringify(emails));
+
+  notifyMsg.style.display = 'block';
+  notifyMsg.style.color = '#059669';
+  notifyMsg.textContent = "You're on the list! We'll email you when we launch.";
+  emailInput.value = '';
+  notifyBtn.textContent = 'Added!';
+  notifyBtn.disabled = true;
+  setTimeout(function() { notifyBtn.textContent = 'Notify me'; notifyBtn.disabled = false; }, 3000);
+});
+
+emailInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') notifyBtn.click();
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    var target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
